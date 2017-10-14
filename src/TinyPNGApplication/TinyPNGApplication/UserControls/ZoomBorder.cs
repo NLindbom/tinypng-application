@@ -7,17 +7,13 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 
-namespace TinyPNGApplication
+namespace TinyPNGApplication.UserControls
 {
     /// <summary>
-    /// Border with child pan/zoom support credit to Wiesław Šoltés: https://stackoverflow.com/questions/741956/pan-zoom-image
+    /// Custom control with child pan/zoom support credit to Wiesław Šoltés: https://stackoverflow.com/questions/741956/pan-zoom-image
     /// </summary>
     public class ZoomBorder : Border
     {
-        /*public static readonly DependencyProperty RenderTransformProperty =
-            DependencyProperty.Register("Date", typeof(DateTime), typeof(DaiesContainer),
-            new PropertyMetadata(DateTime.Now, DatePropertyChanged));
-            */
         private UIElement child = null;
         private Point origin;
         private Point start;
@@ -40,13 +36,14 @@ namespace TinyPNGApplication
 
             if (child != null)
             {
-                var transformGroup = new TransformGroup();
-
-                var scaleTransform = new ScaleTransform();
-                var translateTransform = new TranslateTransform();
-
-                transformGroup.Children.Add(scaleTransform);
-                transformGroup.Children.Add(translateTransform);
+                var transformGroup = new TransformGroup()
+                {
+                    Children =
+                    {
+                        new ScaleTransform(),
+                        new TranslateTransform()
+                    }
+                };
 
                 child.RenderTransform = transformGroup;
 
@@ -56,7 +53,7 @@ namespace TinyPNGApplication
                 this.MouseLeftButtonDown += child_MouseLeftButtonDown;
                 this.MouseLeftButtonUp += child_MouseLeftButtonUp;
                 this.MouseMove += child_MouseMove;
-                this.PreviewMouseRightButtonDown += new MouseButtonEventHandler(child_PreviewMouseRightButtonDown);
+                this.PreviewMouseRightButtonDown += child_PreviewMouseRightButtonDown;
             }
         }
 
@@ -86,8 +83,6 @@ namespace TinyPNGApplication
             return (element.RenderTransform as TransformGroup).Children.First(tr => tr is ScaleTransform) as ScaleTransform;
         }
 
-        #region Child Events
-
         private void child_MouseWheel(object sender, MouseWheelEventArgs e)
         {
             if (child != null)
@@ -96,7 +91,7 @@ namespace TinyPNGApplication
                 var translateTransform = GetTranslateTransform(child);
 
                 double zoom = e.Delta > 0 ? .2 : -.2;
-                if (!(e.Delta > 0) && (scaleTransform.ScaleX < .4 || scaleTransform.ScaleY < .4))
+                if (e.Delta <= 0 && (scaleTransform.ScaleX < .4 || scaleTransform.ScaleY < .4))
                     return;
 
                 var relative = e.GetPosition(child);
@@ -157,7 +152,5 @@ namespace TinyPNGApplication
                 }
             }
         }
-
-        #endregion
     }
 }

@@ -4,72 +4,54 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TinyPNGApplication"
+        xmlns:usercontrol="clr-namespace:TinyPNGApplication.UserControls"
+        xmlns:viewmodel="clr-namespace:TinyPNGApplication.ViewModels"
         mc:Ignorable="d"
-        Title="MainWindow" 
-        Height="350" 
-        Width="525" 
-        Background="White"        
-        AllowDrop="True" 
-        DragOver="Handle_DragOver"
-        Drop="Handle_Drop">
+        Title="TinyPNGApplication" Height="350" Width="525">
     <Window.DataContext>
-        <local:ViewModel/>
+        <viewmodel:MainViewModel />
     </Window.DataContext>
-    <DockPanel>
-        <Menu DockPanel.Dock="Top">
-            <MenuItem Header="_File">
-                <MenuItem Header="_Open" Click="MenuOpen_Click"></MenuItem>
-                <MenuItem Header="_Save" Click="MenuSave_Click"></MenuItem>
-            </MenuItem>
-            <MenuItem Header="Set API _Key">
-                <DockPanel>
-                    <Label Content="TinyPNG API Key:"/>
-                    <TextBox Width="200" VerticalAlignment="Center" Text="{Binding APIKey}"></TextBox>
-                </DockPanel>
-            </MenuItem>
-        </Menu>
-        <Grid>
-            <Grid Name="DropGrid">
-                <Rectangle Name="DropRectangle"
-                           Grid.Row="0" 
-                           Grid.Column="0"               
-                           Style="{StaticResource DropRectangle}"
-                           Margin="10,10,10,10"
-                           Width="100"
-                           Height="100"
-                           HorizontalAlignment="Center"      
-                           VerticalAlignment="Center"/>
-                <Border Height="100" Width="100" Padding="10,10,10,10" >
-                    <TextBlock Text="Drag and drop a file to the window" 
-                               HorizontalAlignment="Center" 
-                               VerticalAlignment="Center" 
-                               TextWrapping="Wrap" 
-                               TextAlignment="Center"/>
-                </Border>
-            </Grid>
-            <Grid Name="ImageGrid" Visibility="Visible">
-                <Grid.RowDefinitions>
-                    <RowDefinition />
-                    <RowDefinition />
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition />
-                    <ColumnDefinition />
-                </Grid.ColumnDefinitions>
-                <Grid Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
-                    <Border Background="LightGray"/>
-                    <local:ZoomBorder ClipToBounds="True">
-                        <Image Name="inputImage" RenderTransform="{Binding ImageRenderTransform}" />
-                    </local:ZoomBorder>
+    <usercontrol:DropBorder Command="{Binding DropCommand}" Filename="{Binding InputFilename, Mode=OneWayToSource}" DragDropState="{Binding DragDropState, Mode=OneWayToSource}">
+        <DockPanel>
+            <Menu DockPanel.Dock="Top">
+                <MenuItem Header="_File">
+                    <MenuItem Header="_Open" Command="{Binding FileOpenCommand}"></MenuItem>
+                    <MenuItem Header="_Save" Command="{Binding FileSaveCommand}"></MenuItem>
+                </MenuItem>
+                <MenuItem Header="Set API _Key">
+                    <DockPanel>
+                        <Label Content="TinyPNG API Key:"/>
+                        <TextBox Width="200" VerticalAlignment="Center" Text="{Binding APIKey}"></TextBox>
+                    </DockPanel>
+                </MenuItem>
+            </Menu>
+            <Grid>
+                <Grid Visibility="{Binding DropGridVisibility}">
+                    <Rectangle Style="{StaticResource DashedRectangle}" Stroke="{Binding DropRectangleBrush}" Width="100" Height="100" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <Border Height="100" Width="100" Padding="10,10,10,10" >
+                        <TextBlock Text="Drag and drop a file to the window" HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap" TextAlignment="Center"/>
+                    </Border>
                 </Grid>
-                <GridSplitter Height="2" ResizeDirection="Rows" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" />
-                <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
-                    <Border Background="LightGray"/>
-                    <local:ZoomBorder ClipToBounds="True">
-                        <Image Name="outputImage" RenderTransform="{Binding ImageRenderTransform}"/>
-                    </local:ZoomBorder>
+                <Grid Visibility="{Binding ImageGridVisibility}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="0">
+                        <Border Background="LightGray"/>
+                        <usercontrol:ZoomBorder ClipToBounds="True">
+                            <Image Source="{Binding InputImage}" RenderTransform="{Binding ImageRenderTransform}" />
+                        </usercontrol:ZoomBorder>
+                    </Grid>
+                    <GridSplitter Height="2" ResizeDirection="Rows" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" />
+                    <Grid Grid.Row="1">
+                        <Border Background="LightGray"/>
+                        <usercontrol:ZoomBorder ClipToBounds="True">
+                            <Image Source="{Binding OutputImage}" RenderTransform="{Binding ImageRenderTransform}"/>
+                        </usercontrol:ZoomBorder>
+                    </Grid>
                 </Grid>
             </Grid>
-        </Grid>
-    </DockPanel>
+        </DockPanel>
+    </usercontrol:DropBorder>
 </Window>

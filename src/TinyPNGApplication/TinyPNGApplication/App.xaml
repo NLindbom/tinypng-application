@@ -4,12 +4,12 @@
              xmlns:local="clr-namespace:TinyPNGApplication"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-        <Style x:Key="DropRectangle" TargetType="Rectangle">
-            <Setter Property="Stroke" Value="LightGray"/>
+        <Style x:Key="DashedRectangle" TargetType="Rectangle">
+            <Setter Property="Stroke" Value="LightGray" />
             <Setter Property="StrokeThickness" Value="2" />
             <Setter Property="StrokeDashArray" Value="4 4" />
             <Setter Property="RadiusX" Value="4" />
-            <Setter Property="RadiusY" Value="4"/>
+            <Setter Property="RadiusY" Value="4" />
         </Style>
     </Application.Resources>
 </Application>
