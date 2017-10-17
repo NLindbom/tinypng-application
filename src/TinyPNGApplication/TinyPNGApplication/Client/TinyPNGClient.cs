@@ -64,6 +64,18 @@ namespace TinyPNGApplication.Client
             return await Response.BuildResponseAsync<ErrorResponse>(responseMessage);
         }
 
+        public async Task<Response> GetImage(Uri location)
+        {
+            var responseMessage = await client.GetAsync(location);
+
+            if (responseMessage.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+                return await Response.BuildResponseAsync<ImageResponse>(responseMessage);
+            }
+
+            return await Response.BuildResponseAsync<ErrorResponse>(responseMessage);
+        }
+
         protected virtual void Dispose(bool disposing)
         {
             if (disposing)

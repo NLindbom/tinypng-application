@@ -7,30 +7,18 @@ using System.Windows.Input;
 
 namespace TinyPNGApplication
 {
-    public class Command : ICommand
+    public class Command : CommandBase
     {
-        public event EventHandler CanExecuteChanged;
+        public Action command;
 
-        public Action action;
-        public Func<bool> canExecute;
-
-        public Command(Action execute, Func<bool> canExecute = null)
+        public Command(Action command, Func<bool> canExecute = null)
         {
-            action = execute;
-            this.canExecute = canExecute;
+            this.command = command;
         }
 
-        public bool CanExecute(object parameter)
+        public override void Execute(object parameter)
         {
-            if (canExecute == null)
-                return true;
-
-            return canExecute.Invoke();
-        }
-
-        public void Execute(object parameter)
-        {
-            action.Invoke();
+            command.Invoke();
         }
     }
 }

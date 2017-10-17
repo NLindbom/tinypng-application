@@ -25,30 +25,31 @@
                     </DockPanel>
                 </MenuItem>
             </Menu>
-            <Grid>
+            <Grid Background="DarkGray">
                 <Grid Visibility="{Binding DropGridVisibility}">
-                    <Rectangle Style="{StaticResource DashedRectangle}" Stroke="{Binding DropRectangleBrush}" Width="100" Height="100" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <Rectangle Style="{StaticResource DashedRectangle}" Width="100" Height="100" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     <Border Height="100" Width="100" Padding="10,10,10,10" >
                         <TextBlock Text="Drag and drop a file to the window" HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap" TextAlignment="Center"/>
                     </Border>
                 </Grid>
-                <Grid Visibility="{Binding ImageGridVisibility}">
+                <Grid Visibility="{Binding ImageGridVisibility}" Margin="5">
                     <Grid.RowDefinitions>
                         <RowDefinition />
+                        <RowDefinition Height="5"/>
                         <RowDefinition />
                     </Grid.RowDefinitions>
                     <Grid Grid.Row="0">
-                        <Border Background="LightGray"/>
+                        <Border Background="White"/>
                         <usercontrol:ZoomBorder ClipToBounds="True">
-                            <Image Source="{Binding InputImage}" RenderTransform="{Binding ImageRenderTransform}" />
+                            <Image Source="{Binding InputImage}" RenderTransform="{Binding ImageRenderTransform}"/>
                         </usercontrol:ZoomBorder>
                     </Grid>
-                    <GridSplitter Height="2" ResizeDirection="Rows" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" />
-                    <Grid Grid.Row="1">
-                        <Border Background="LightGray"/>
+                    <Grid Grid.Row="2">
+                        <Border Background="White"/>
                         <usercontrol:ZoomBorder ClipToBounds="True">
                             <Image Source="{Binding OutputImage}" RenderTransform="{Binding ImageRenderTransform}"/>
                         </usercontrol:ZoomBorder>
+                        <TextBlock Text="{Binding OutputStatusText}" Visibility="{Binding OutputStatusText, Converter={StaticResource converter}}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     </Grid>
                 </Grid>
             </Grid>

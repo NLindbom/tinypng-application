@@ -24,15 +24,5 @@ namespace TinyPNGApplication
         {
             InitializeComponent();
         }
-
-        private void DockPanel_Drop(object sender, DragEventArgs e)
-        {
-
-        }
-
-        private void DockPanel_DragOver(object sender, DragEventArgs e)
-        {
-
-        }
     }
 }
