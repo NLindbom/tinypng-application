@@ -49,7 +49,10 @@
                         <usercontrol:ZoomBorder ClipToBounds="True">
                             <Image Source="{Binding OutputImage}" RenderTransform="{Binding ImageRenderTransform}"/>
                         </usercontrol:ZoomBorder>
-                        <TextBlock Text="{Binding OutputStatusText}" Visibility="{Binding OutputStatusText, Converter={StaticResource converter}}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        <TextBlock Text="{Binding OutputStatusText}" 
+                                   Visibility="{Binding OutputStatusText, Converter={StaticResource converter}}" 
+                                   HorizontalAlignment="Center" 
+                                   VerticalAlignment="Center"/>
                     </Grid>
                 </Grid>
             </Grid>

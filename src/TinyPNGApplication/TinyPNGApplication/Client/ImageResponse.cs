@@ -19,7 +19,7 @@ namespace TinyPNGApplication.Client
 
         public override async Task BuildResponseAsync(HttpResponseMessage responseMessage)
         {
-            var headers = responseMessage.Headers;
+            // TODO: headers
 
             Data = await responseMessage.Content.ReadAsByteArrayAsync();
         }

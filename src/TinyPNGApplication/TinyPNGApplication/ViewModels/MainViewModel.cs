@@ -234,7 +234,7 @@ namespace TinyPNGApplication.ViewModels
                     {
                         outputBytes = (response as ImageResponse).Data;
 
-                        OutputImage = GetBitmapImage(outputBytes);
+                        OutputImage = GetPNGImageSource(outputBytes);
 
                         OutputStatusText = null;
                     }
@@ -280,6 +280,21 @@ namespace TinyPNGApplication.ViewModels
             image.Freeze();
 
             return image;
+        }
+
+        private static ImageSource GetPNGImageSource(byte[] data)
+        {
+            if (data == null || data.Length == 0)
+                return null;
+
+            using (var mem = new MemoryStream(data))
+            {
+                mem.Position = 0;
+
+                var decoder = new PngBitmapDecoder(mem, BitmapCreateOptions.PreservePixelFormat, BitmapCacheOption.OnLoad);
+
+                return decoder.Frames[0];
+            }
         }
     }
 }
