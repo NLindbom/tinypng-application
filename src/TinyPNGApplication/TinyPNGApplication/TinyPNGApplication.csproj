@@ -59,6 +59,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Client\DataResponse.cs" />
+    <Compile Include="Client\ErrorResponse.cs" />
+    <Compile Include="Client\ImageResponse.cs" />
+    <Compile Include="Client\Response.cs" />
+    <Compile Include="Client\ShrinkResponse.cs" />
     <Compile Include="Command.cs" />
     <Compile Include="UserControls\DropBorder.cs" />
     <Compile Include="UserControls\ZoomBorder.cs" />
@@ -72,9 +77,6 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Client\ErrorResponse.cs" />
-    <Compile Include="Client\IResponse.cs" />
-    <Compile Include="Client\ShrinkResponse.cs" />
     <Compile Include="Client\TinyPNGClient.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>

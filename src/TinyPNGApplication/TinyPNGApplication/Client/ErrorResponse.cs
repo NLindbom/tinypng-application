@@ -6,9 +6,13 @@ using System.Threading.Tasks;
 
 namespace TinyPNGApplication.Client
 {
-    public class ErrorResponse : IResponse
+    public class ErrorResponseData : IResponseData
     {
         public string Error { get; set; }
         public string Message { get; set; }
+    }
+
+    public class ErrorResponse : DataResponseBase<ErrorResponseData>
+    {
     }
 }

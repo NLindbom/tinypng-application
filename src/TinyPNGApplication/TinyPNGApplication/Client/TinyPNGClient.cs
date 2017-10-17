@@ -50,7 +50,7 @@ namespace TinyPNGApplication.Client
                 new AuthenticationHeaderValue(authenticationHeaderValueScheme, authentication);
         }
 
-        public async Task<IResponse> ShrinkAsync(byte[] data)
+        public async Task<Response> ShrinkAsync(byte[] data)
         {
             const string shrinkEndpoint = "https://api.tinify.com/shrink";
 
@@ -58,19 +58,10 @@ namespace TinyPNGApplication.Client
 
             if (responseMessage.StatusCode == System.Net.HttpStatusCode.Created)
             {
-                return await GetResponseAsync<ShrinkResponse>(responseMessage);
+                return await Response.BuildResponseAsync<ShrinkResponse>(responseMessage);
             }
 
-            return await GetResponseAsync<ErrorResponse>(responseMessage);
-        }
-
-        private async Task<T> GetResponseAsync<T>(HttpResponseMessage responseMessage) where T : IResponse
-        {
-            var contentString = await responseMessage.Content.ReadAsStringAsync();
-
-            var response = JsonConvert.DeserializeObject<T>(contentString);
-
-            return response;
+            return await Response.BuildResponseAsync<ErrorResponse>(responseMessage);
         }
 
         protected virtual void Dispose(bool disposing)
