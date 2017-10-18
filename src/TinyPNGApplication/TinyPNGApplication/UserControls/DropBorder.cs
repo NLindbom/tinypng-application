@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 
 namespace TinyPNGApplication.UserControls
 {
@@ -52,6 +53,7 @@ namespace TinyPNGApplication.UserControls
         public DropBorder()
         {
             this.AllowDrop = true;
+            this.Background = Brushes.Transparent;
             this.DragOver += DropBorder_DragOver;
             this.Drop += DropBorder_Drop;
         }

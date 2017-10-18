@@ -11,12 +11,16 @@
     <Window.DataContext>
         <viewmodel:MainViewModel />
     </Window.DataContext>
+    <Window.InputBindings>
+        <KeyBinding Key="O" Modifiers="Ctrl" Command="{Binding FileOpenCommand}"/>
+        <KeyBinding Key="S" Modifiers="Ctrl" Command="{Binding FileSaveCommand}"/>
+    </Window.InputBindings>
     <usercontrol:DropBorder Command="{Binding DropCommand}" Filename="{Binding InputFilename, Mode=OneWayToSource}" DragDropState="{Binding DragDropState, Mode=OneWayToSource}">
         <DockPanel>
             <Menu DockPanel.Dock="Top">
                 <MenuItem Header="_File">
-                    <MenuItem Header="_Open" Command="{Binding FileOpenCommand}"></MenuItem>
-                    <MenuItem Header="_Save" Command="{Binding FileSaveCommand}"></MenuItem>
+                    <MenuItem Header="_Open" Command="{Binding FileOpenCommand}" IsEnabled="{Binding OpenEnabled}"></MenuItem>
+                    <MenuItem Header="_Save" Command="{Binding FileSaveCommand}" IsEnabled="{Binding SaveEnabled}"></MenuItem>
                 </MenuItem>
                 <MenuItem Header="Set API _Key">
                     <DockPanel>
@@ -29,7 +33,7 @@
                 <Grid Visibility="{Binding DropGridVisibility}">
                     <Rectangle Style="{StaticResource DashedRectangle}" Width="100" Height="100" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     <Border Height="100" Width="100" Padding="10,10,10,10" >
-                        <TextBlock Text="Drag and drop a file to the window" HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap" TextAlignment="Center"/>
+                        <TextBlock Text="Drag and drop a png/jpeg file to the window" HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap" TextAlignment="Center"/>
                     </Border>
                 </Grid>
                 <Grid Visibility="{Binding ImageGridVisibility}" Margin="5">
@@ -43,16 +47,15 @@
                         <usercontrol:ZoomBorder ClipToBounds="True">
                             <Image Source="{Binding InputImage}" RenderTransform="{Binding ImageRenderTransform}"/>
                         </usercontrol:ZoomBorder>
+                        <TextBlock Text="{Binding InputImageText}" VerticalAlignment="Bottom" Margin="2" FontSize="10px"/>
                     </Grid>
                     <Grid Grid.Row="2">
                         <Border Background="White"/>
                         <usercontrol:ZoomBorder ClipToBounds="True">
                             <Image Source="{Binding OutputImage}" RenderTransform="{Binding ImageRenderTransform}"/>
                         </usercontrol:ZoomBorder>
-                        <TextBlock Text="{Binding OutputStatusText}" 
-                                   Visibility="{Binding OutputStatusText, Converter={StaticResource converter}}" 
-                                   HorizontalAlignment="Center" 
-                                   VerticalAlignment="Center"/>
+                        <TextBlock Text="{Binding OutputImageText}" VerticalAlignment="Bottom" Margin="2" FontSize="10px"/>
+                        <TextBlock Text="{Binding OutputStatusText}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     </Grid>
                 </Grid>
             </Grid>

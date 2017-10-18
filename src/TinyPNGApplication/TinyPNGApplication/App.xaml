@@ -4,7 +4,6 @@
              xmlns:local="clr-namespace:TinyPNGApplication"
              StartupUri="Views/MainWindow.xaml">
     <Application.Resources>
-        <local:StringToVisibilityConverter x:Key="converter" />
         <Style x:Key="DashedRectangle" TargetType="Rectangle">
             <Setter Property="Stroke" Value="LightGray" />
             <Setter Property="StrokeThickness" Value="2" />

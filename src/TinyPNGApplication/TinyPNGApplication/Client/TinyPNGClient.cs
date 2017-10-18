@@ -24,12 +24,11 @@ namespace TinyPNGApplication.Client
             }
         }
 
-        public TinyPNGClient(string apiKey)
+        public TinyPNGClient(string apiKey = null)
         {
-            this.apiKey = apiKey;
-
             client = new HttpClient();
 
+            this.apiKey = apiKey;
             Configure();
         }
 

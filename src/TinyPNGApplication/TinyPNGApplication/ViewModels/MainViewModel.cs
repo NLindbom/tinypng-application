@@ -24,12 +24,16 @@ namespace TinyPNGApplication.ViewModels
         private string apiKey;
         private bool openEnabled;
         private bool saveEnabled;
-        private Client.TinyPNGClient client;
+        private TinyPNGClient client;
         private UserControls.DropBorder.State dragDropState;
         private Visibility dropGridVisibility;
         private Visibility imageGridVisibility;
         private byte[] inputBytes;
         private byte[] outputBytes = null;
+        private ImageSource inputImage;
+        private ImageSource outputImage;
+        private string inputImageText = null;
+        private string outputImageText = null;
         private string outputStatusText = null;
 
         public string APIKey
@@ -78,8 +82,8 @@ namespace TinyPNGApplication.ViewModels
         public ICommand FileSaveCommand { get; set; }
         public ICommand DropCommand { get; set; }
 
-        public ImageSource InputImage { get; set; }
-        public ImageSource OutputImage { get; set; }
+        public ImageSource InputImage { get { return inputImage; } set { SetValue(ref inputImage, value); } }
+        public ImageSource OutputImage { get { return outputImage; } set { SetValue(ref outputImage, value); } }
 
         public Visibility DropGridVisibility
         {
@@ -111,6 +115,9 @@ namespace TinyPNGApplication.ViewModels
             }
         }
 
+        public string InputImageText { get { return inputImageText; } set { SetValue(ref inputImageText, value); } }
+        public string OutputImageText { get { return outputImageText; } set { SetValue(ref outputImageText, value); } }
+
         public string OutputStatusText
         {
             get { return outputStatusText; }
@@ -119,15 +126,15 @@ namespace TinyPNGApplication.ViewModels
 
         public MainViewModel()
         {
-            apiKey = Properties.Settings.Default.APIKey;
-            client = new Client.TinyPNGClient(apiKey);
+            client = new TinyPNGClient();
+
+            APIKey = Properties.Settings.Default.APIKey;
 
             FileOpenCommand = new AsyncCommand(OnFileOpenAsync);
             FileSaveCommand = new Command(OnFileSave, () => SaveEnabled);
             DropCommand = new AsyncCommand(OnDropAsync, () => OpenEnabled);
 
-            OpenEnabled = true;
-            SaveEnabled = true;
+            SaveEnabled = false;
 
             ImageRenderTransform = new TransformGroup()
             {
@@ -176,7 +183,7 @@ namespace TinyPNGApplication.ViewModels
 
             if (dialog.ShowDialog() == true)
             {
-
+                File.WriteAllBytes(dialog.FileName, outputBytes);
             }
         }
 
@@ -192,8 +199,7 @@ namespace TinyPNGApplication.ViewModels
                 this.inputBytes = File.ReadAllBytes(filename);
 
                 InputImage = GetBitmapImage(inputBytes);
-
-                NotifyPropertyChanged("InputImage");
+                InputImageText = $"{inputBytes.LongLength / 1024L}k";
 
                 SaveEnabled = true;
 
@@ -234,7 +240,8 @@ namespace TinyPNGApplication.ViewModels
                     {
                         outputBytes = (response as ImageResponse).Data;
 
-                        OutputImage = GetPNGImageSource(outputBytes);
+                        OutputImage = GetBitmapImage(outputBytes);
+                        OutputImageText = $"{outputBytes.LongLength / 1024L}k; {Math.Round(100d - 100d * outputBytes.LongLength / inputBytes.LongLength):N1}% shrink";
 
                         OutputStatusText = null;
                     }
@@ -280,21 +287,6 @@ namespace TinyPNGApplication.ViewModels
             image.Freeze();
 
             return image;
-        }
-
-        private static ImageSource GetPNGImageSource(byte[] data)
-        {
-            if (data == null || data.Length == 0)
-                return null;
-
-            using (var mem = new MemoryStream(data))
-            {
-                mem.Position = 0;
-
-                var decoder = new PngBitmapDecoder(mem, BitmapCreateOptions.PreservePixelFormat, BitmapCacheOption.OnLoad);
-
-                return decoder.Frames[0];
-            }
         }
     }
 }
