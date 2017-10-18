@@ -1,6 +1,4 @@
-﻿using Microsoft.Windows.Design.Features;
-using Microsoft.Windows.Design.Model;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,7 +10,6 @@ using System.Windows.Media;
 
 namespace TinyPNGApplication.UserControls
 {
-    [Feature(typeof(DropBorderDefaults))]
     public class DropBorder : Border
     {
         public enum State
@@ -97,16 +94,6 @@ namespace TinyPNGApplication.UserControls
             }
 
             return null;
-        }
-    }
-
-    public class DropBorderDefaults : DefaultInitializer
-    {
-        public override void InitializeDefaults(ModelItem item)
-        {
-            base.InitializeDefaults(item);
-
-            item.Properties["AllowDrop"].SetValue(true);
         }
     }
 }
