@@ -32,6 +32,7 @@ namespace TinyPNGApplication.ViewModels
         private byte[] outputBytes = null;
         private ImageSource inputImage;
         private ImageSource outputImage;
+        private string inputFilename = null;
         private string inputImageText = null;
         private string outputImageText = null;
         private string outputStatusText = null;
@@ -48,8 +49,7 @@ namespace TinyPNGApplication.ViewModels
                     Properties.Settings.Default.Save();
                 }
 
-                if (string.IsNullOrWhiteSpace(APIKey))
-                    OpenEnabled = true;
+                OpenEnabled = !string.IsNullOrWhiteSpace(APIKey);
             }
         }
 
@@ -164,7 +164,7 @@ namespace TinyPNGApplication.ViewModels
         {
             OpenFileDialog dialog = new OpenFileDialog()
             {
-                Filter = "Supported images(*.png; *.jpg) | *.png;*.jpg | All files(*.*) | *.*",
+                Filter = "PNG image(*.png) | *.png | All files(*.*) | *.*",
                 FilterIndex = 1
             };
 
@@ -176,9 +176,24 @@ namespace TinyPNGApplication.ViewModels
 
         public void OnFileSave()
         {
+            string suggestFilename;
+
+            try
+            {
+                FileInfo fileInfo = new FileInfo(inputFilename);
+
+                suggestFilename = Path.Combine(fileInfo.DirectoryName, 
+                    $"{fileInfo.Name.Substring(0, fileInfo.Name.Length - fileInfo.Extension.Length)}_tiny{fileInfo.Extension}");
+            }
+            catch
+            {
+                suggestFilename = null;
+            }
+
             SaveFileDialog dialog = new SaveFileDialog()
             {
                 Filter = "PNG image(*.png) | *.png",
+                FileName = suggestFilename
             };
 
             if (dialog.ShowDialog() == true)
@@ -192,9 +207,16 @@ namespace TinyPNGApplication.ViewModels
             if (!File.Exists(filename))
                 return;
 
+            inputFilename = filename;
+
             try
             {
                 Mouse.SetCursor(Cursors.Wait);
+
+                OutputImage = null;
+                outputBytes = null;
+                SaveEnabled = false;
+
 
                 this.inputBytes = File.ReadAllBytes(filename);
 
@@ -208,10 +230,6 @@ namespace TinyPNGApplication.ViewModels
             catch
             {
                 InputImage = null;
-                OutputImage = null;
-                outputBytes = null;
-
-                SaveEnabled = false;
 
                 ViewMode = ViewModes.Drop;
             }
@@ -241,7 +259,7 @@ namespace TinyPNGApplication.ViewModels
                         outputBytes = (response as ImageResponse).Data;
 
                         OutputImage = GetBitmapImage(outputBytes);
-                        OutputImageText = $"{outputBytes.LongLength / 1024L}k; {Math.Round(100d - 100d * outputBytes.LongLength / inputBytes.LongLength):N1}% shrink";
+                        OutputImageText = $"{outputBytes.LongLength / 1024L}k; {Math.Round(100d - 100d * outputBytes.LongLength / inputBytes.LongLength, 1):N1}% shrink";
 
                         OutputStatusText = null;
                     }

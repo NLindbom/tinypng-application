@@ -33,7 +33,7 @@
                 <Grid Visibility="{Binding DropGridVisibility}">
                     <Rectangle Style="{StaticResource DashedRectangle}" Width="100" Height="100" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     <Border Height="100" Width="100" Padding="10,10,10,10" >
-                        <TextBlock Text="Drag and drop a png/jpeg file to the window" HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap" TextAlignment="Center"/>
+                        <TextBlock Text="Drag and drop a png file to the window" HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap" TextAlignment="Center"/>
                     </Border>
                 </Grid>
                 <Grid Visibility="{Binding ImageGridVisibility}" Margin="5">
